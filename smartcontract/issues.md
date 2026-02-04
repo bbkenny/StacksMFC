@@ -22,12 +22,12 @@ This document tracks the engineering tasks for the Clarity smart contracts, focu
   - [x] Add `transfer-ownership` function.
 
 ### Issue #3: Registry Validation Logic
-**Priority:** Medium | **Status:** 📅 Pending  
+**Priority:** Medium | **Status:** ✅ Completed  
 **Description:** Prevent invalid data from entering the registry.
 - **Tasks:**
-  - [ ] Assert symbol length is > 0.
-  - [ ] Assert decimals is <= 18.
-  - [ ] Add error codes: `ERR-INVALID-SYMBOL (u102)`, `ERR-NOT-OWNER (u103)`.
+  - [x] Assert symbol length is > 0.
+  - [x] Assert decimals is <= 18.
+  - [x] Add error codes for invalid input.
 
 ---
 

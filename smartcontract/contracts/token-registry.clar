@@ -23,6 +23,8 @@
 (define-constant ERR-NOT-AUTHORIZED (err u100))
 (define-constant ERR-TOKEN-ALREADY-EXISTS (err u101))
 (define-constant ERR-TOKEN-NOT-FOUND (err u102))
+(define-constant ERR-INVALID-SYMBOL (err u103))
+(define-constant ERR-INVALID-DECIMALS (err u104))
 
 ;; --- Read-Only Functions ---
 
@@ -55,6 +57,8 @@
 (define-public (add-token (symbol (string-ascii 12)) (name (string-ascii 64)) (contract principal) (decimals uint) (logo-uri (string-ascii 256)) (chain (string-ascii 20)))
   (begin
     (asserts! (is-eq tx-sender (var-get contract-admin)) ERR-NOT-AUTHORIZED)
+    (asserts! (> (len symbol) u0) ERR-INVALID-SYMBOL)
+    (asserts! (<= decimals u18) ERR-INVALID-DECIMALS)
     (asserts! (is-none (get-token-metadata symbol)) ERR-TOKEN-ALREADY-EXISTS)
     (ok (map-set tokens { symbol: symbol } 
       { 
@@ -72,6 +76,8 @@
 (define-public (update-token-metadata (symbol (string-ascii 12)) (name (string-ascii 64)) (contract principal) (decimals uint) (logo-uri (string-ascii 256)) (chain (string-ascii 20)))
   (begin
     (asserts! (is-eq tx-sender (var-get contract-admin)) ERR-NOT-AUTHORIZED)
+    (asserts! (> (len symbol) u0) ERR-INVALID-SYMBOL)
+    (asserts! (<= decimals u18) ERR-INVALID-DECIMALS)
     (asserts! (is-some (get-token-metadata symbol)) ERR-TOKEN-NOT-FOUND)
     (ok (map-set tokens { symbol: symbol } 
       { 
