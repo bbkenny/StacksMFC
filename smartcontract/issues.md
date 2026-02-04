@@ -1,62 +1,57 @@
-# Project Issues - Stacks Mini Finance Console (SMFC)
+# Smart Contract Roadmap - Stacks Mini Finance Console (SMFC)
 
-This document outlines the roadmap and tasks for building the lightweight Bitcoin & Stacks financial radar.
+This document tracks the engineering tasks for the Clarity smart contracts, focusing on the Token Registry and Read-Only utility layers.
 
-## Smart Contract Issues
+## 🛠️ Module 1: Token Registry (Core)
 
-### Token Registry
-#### Issue #1: Implement Token Registry Contract
-**Priority:** High  
-**Status:** 🚧 In Progress  
-**Description:** A Clarity smart contract to store verified token metadata.
+### Issue #1: Implement Verified Metadata Map
+**Priority:** High | **Status:** 📅 Pending  
+**Description:** Define the storage structure for trust-minimized token discovery.
 - **Tasks:**
-  - [ ] Define `tokens` map (name, symbol, contract-address, chain, decimals).
-  - [ ] Implement `add-token` function (admin only).
-  - [ ] Implement `update-token` function (admin only).
-  - [ ] Implement `remove-token` function (admin only).
-  - [ ] Implement `get-token` read-only function.
+  - [ ] Define `tokens` map: `{ symbol: (string-ascii 12) }` -> `{ name: (string-ascii 64), contract: principal, decimals: uint, logo-uri: (string-ascii 256), chain: (string-ascii 20) }`.
+  - [ ] Implement `get-token-metadata` (Read-only).
+  - [ ] Implement `is-token-verified` check.
 
-#### Issue #2: Admin & Governance Roles
-**Priority:** Medium  
-**Status:** 📅 Pending  
-**Description:** Implement basic access control for managing the token registry.
+### Issue #2: Administrative Access Control
+**Priority:** High | **Status:** 📅 Pending  
+**Description:** Ensure only authorized maintainers can update the registry.
+- **Tasks:**
+  - [ ] Implement `contract-owner` constant.
+  - [ ] Add `add-token` function with `asserts! (is-eq tx-sender contract-owner)`.
+  - [ ] Add `update-token-metadata` function.
+  - [ ] Add `transfer-ownership` function for governance.
 
----
-
-## Frontend Issues
-
-### Wallet & Balance
-#### Issue #3: Connect Stacks Wallet
-**Priority:** High  
-**Status:** 📅 Pending  
-**Description:** Integrate Hiro/Xverse/Leather wallets for balance retrieval.
-
-#### Issue #4: Portfolio Dashboard
-**Priority:** High  
-**Status:** 📅 Pending  
-**Description:** Display BTC, STX, and sBTC balances with real-time USD valuation.
-
-### Tools & Radar
-#### Issue #5: Universal Conversion Calculator
-**Priority:** Medium  
-**Status:** 📅 Pending  
-**Description:** Build the UI for BTC/STX/USD/Token conversions.
-
-#### Issue #6: DeFi Radar UI
-**Priority:** Medium  
-**Status:** 📅 Pending  
-**Description:** Display lending APYs and sBTC bridge status from public APIs.
+### Issue #3: Registry Validation Logic
+**Priority:** Medium | **Status:** 📅 Pending  
+**Description:** Prevent invalid data from entering the registry.
+- **Tasks:**
+  - [ ] Assert symbol length is > 0.
+  - [ ] Assert decimals is <= 18.
+  - [ ] Add error codes: `ERR-INVALID-SYMBOL (u102)`, `ERR-NOT-OWNER (u103)`.
 
 ---
 
-## Infrastructure & DevOps
+## 📊 Module 2: Utility & Aggregation (Read-Only)
 
-#### Issue #7: Mainnet Deployment Strategy
-**Priority:** Low  
-**Status:** 📅 Pending  
-**Description:** Prepare deployment plans for the Token Registry contract.
+### Issue #4: Portfolio Batch Fetcher
+**Priority:** Medium | **Status:** 📅 Pending  
+**Description:** Create a helper function to fetch multiple token balances in a single call for the frontend.
+- **Tasks:**
+  - [ ] Implement `get-balances` function taking a list of token principals.
+  - [ ] Return a response with `{ token: principal, balance: uint }` list.
 
-#### Issue #8: UI Theme Implementation
-**Priority:** Medium  
-**Status:** 🚧 In Progress  
-**Description:** Implement the dark "Terminal" vibe with Stacks Orange accents as defined in README.
+---
+
+## 🧪 Testing & Quality Assurance
+
+### Issue #5: Comprehensive Test Suite
+**Priority:** High | **Status:** 🚧 In Progress  
+- [ ] **Unit Tests**: Test successful token addition and unauthorized rejection.
+- [ ] **Edge Cases**: Test updating non-existent tokens and removing tokens.
+- [ ] **Integration**: Test fetching registry data via `vitest` and `clarinet-sdk`.
+
+### Issue #6: Security Review
+**Priority:** Critical | **Status:** 📅 Pending  
+- [ ] Check for post-condition vulnerabilities.
+- [ ] Ensure all administrative functions are properly gated.
+- [ ] Optimize data maps for gas efficiency.

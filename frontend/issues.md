@@ -1,50 +1,72 @@
-# Frontend Issues - Stacks Mini Finance Console (SMFC)
+# Frontend Roadmap - Stacks Mini Finance Console (SMFC)
 
-This document tracks the UI/UX and feature implementation tasks for the SMFC dashboard.
+This document outlines the UI/UX development and blockchain integration strategy for the SMFC dashboard.
 
----
+## 🎨 Phase 1: Terminal UI & Core Layout
 
-## 🚀 Priority: High
+### Issue #1: "Console" Layout & Glassmorphism
+**Priority:** High | **Status:** 🚧 In Progress  
+**Description:** Establish the "Terminal" aesthetic using Tailwind CSS 4 and Stacks Orange.
+- **Tasks:**
+  - [ ] Implement `Sidebar` with navigation: Dashboard, Portfolio, Converter, Radar.
+  - [ ] Apply `Geist Mono` font globally for a code-centric feel.
+  - [ ] Create `ConsoleCard` component with glassmorphism (blur, border-opacity, neon-glow).
+  - [ ] Add `Framer Motion` page transitions (slide-up + fade).
 
-### Issue #1: Dashboard implementation
-**Status:** 🚧 IN PROGRESS  
-**Description:** Build the main dashboard layout with the "Terminal" aesthetic.
-- [ ] Implement the hero section with Stacks Orange theme.
-- [ ] Create the "Finance Console" layout with feature cards.
-- [ ] Add Framer Motion animations for smooth transitions.
-
-### Issue #2: Wallet Balance Integration
-**Status:** 📅 PENDING  
-**Description:** Connect to the Stacks API to fetch and display user balances.
-- [ ] Implement balance fetching for STX and BTC.
-- [ ] Add support for SIP-010 token balances.
-- [ ] Implement real-time USD valuation via price APIs.
+### Issue #2: Real-time "Ticker" Component
+**Priority:** Low | **Status:** 📅 Pending  
+**Description:** A scrolling ticker at the top/bottom showing live BTC/STX prices.
 
 ---
 
-## 🛠️ Features & Tools
+## ⛓️ Phase 2: Stacks & Wallet Integration
 
-### Issue #3: Universal Conversion Calculator
-**Status:** 📅 PENDING  
-**Description:** Build the UI for asset conversions.
-- [ ] Create input fields for amount and asset selection.
-- [ ] Integrate real-time price feeds.
-- [ ] Implement STX ↔ BTC ↔ USD logic.
+### Issue #3: Robust Session Management
+**Priority:** High | **Status:** 📅 Pending  
+**Description:** Handle wallet state and data persistence using `@stacks/connect`.
+- **Tasks:**
+  - [ ] Implement `StacksProvider` context to wrap the application.
+  - [ ] Store `UserData` and handle `onFinish` callbacks for auth.
+  - [ ] Implement "Address Formatting" utility (e.g., `SP12...ABCD`).
 
-### Issue #4: DeFi Radar Page
-**Status:** 📅 PENDING  
-**Description:** Display read-only DeFi data from Stacks protocols.
-- [ ] Aggregate lending APYs from major protocols (Alex, Zest, etc.).
-- [ ] Display sBTC bridge status.
-- [ ] Create minimal charts for price monitoring.
+### Issue #4: Asset Portfolio Engine
+**Priority:** Critical | **Status:** 📅 Pending  
+**Description:** The core logic for fetching balances across multiple assets.
+- **Tasks:**
+  - [ ] Integrate `Hiro API` for STX balance.
+  - [ ] Integrate `CoinGecko API` for real-time USD conversion rates.
+  - [ ] Map through `Token Registry` contract to fetch SIP-010 balances.
+  - [ ] Calculate total portfolio value in USD.
 
 ---
 
-## ✅ Planned UI Polishing
+## 🛠️ Phase 3: Financial Tools
 
-### Issue #5: "Terminal" UI Theme refinement
-**Status:** 🚧 IN PROGRESS  
-**Description:** Finalize the glassmorphism and neon glow effects.
-- [ ] Refine Tailwind colors to match README specs.
-- [ ] Add scanline/terminal effects to the background.
-- [ ] Ensure full mobile responsiveness for all tools.
+### Issue #5: Universal Calculator implementation
+**Priority:** Medium | **Status:** 📅 Pending  
+**Description:** A tool for converting values between ecosystem assets.
+- **Tasks:**
+  - [ ] Build `ConversionForm` with live validation.
+  - [ ] Support `BTC ↔ USD`, `STX ↔ USD`, and `sBTC ↔ STX`.
+  - [ ] Add "Copy to Clipboard" for calculation results.
+
+### Issue #6: DeFi Radar (The Monitoring Tool)
+**Priority:** Medium | **Status:** 📅 Pending  
+**Description:** A dashboard to view the health of Stacks DeFi.
+- [ ] **Lending APYs**: Fetch data from Zest and Alex protocols (mock if no API).
+- [ ] **sBTC Bridge**: Display status (Active/Maintenance) and minting limits.
+- [ ] **Transaction History**: List last 5 wallet transactions with status badges.
+
+---
+
+## 🚀 Phase 4: Performance & Polish
+
+### Issue #7: State Optimization & Caching
+**Priority:** Medium | **Status:** 📅 Pending  
+- [ ] Use `SWR` or `React Query` for price feed caching (5-minute TTL).
+- [ ] Implement `Skeleton Loaders` for the portfolio table.
+
+### Issue #8: Mobile Console Experience
+**Priority:** High | **Status:** 📅 Pending  
+- [ ] Responsive navigation (bottom bar for mobile).
+- [ ] Touch-optimized cards for the DeFi Radar.
