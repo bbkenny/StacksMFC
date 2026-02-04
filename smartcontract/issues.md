@@ -5,12 +5,12 @@ This document tracks the engineering tasks for the Clarity smart contracts, focu
 ## 🛠️ Module 1: Token Registry (Core)
 
 ### Issue #1: Implement Verified Metadata Map
-**Priority:** High | **Status:** 📅 Pending  
+**Priority:** High | **Status:** ✅ Completed  
 **Description:** Define the storage structure for trust-minimized token discovery.
 - **Tasks:**
-  - [ ] Define `tokens` map: `{ symbol: (string-ascii 12) }` -> `{ name: (string-ascii 64), contract: principal, decimals: uint, logo-uri: (string-ascii 256), chain: (string-ascii 20) }`.
-  - [ ] Implement `get-token-metadata` (Read-only).
-  - [ ] Implement `is-token-verified` check.
+  - [x] Define `tokens` map: `{ symbol: (string-ascii 12) }` -> `{ name: (string-ascii 64), contract: principal, decimals: uint, logo-uri: (string-ascii 256), chain: (string-ascii 20) }`.
+  - [x] Implement `get-token-metadata` (Read-only).
+  - [x] Implement `is-token-verified` check.
 
 ### Issue #2: Administrative Access Control
 **Priority:** High | **Status:** 📅 Pending  
