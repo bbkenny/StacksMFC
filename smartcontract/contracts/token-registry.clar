@@ -3,6 +3,8 @@
 
 ;; --- Data Maps and Vars ---
 
+(define-data-var contract-admin principal tx-sender)
+
 (define-map tokens 
   { symbol: (string-ascii 12) }
   {
@@ -16,7 +18,11 @@
 
 ;; --- Constants ---
 
-(define-constant contract-owner tx-sender)
+;; Error Codes ---
+
+(define-constant ERR-NOT-AUTHORIZED (err u100))
+(define-constant ERR-TOKEN-ALREADY-EXISTS (err u101))
+(define-constant ERR-TOKEN-NOT-FOUND (err u102))
 
 ;; --- Read-Only Functions ---
 
@@ -33,4 +39,57 @@
 ;; Get the contract principal for a token
 (define-read-only (get-token-contract (symbol (string-ascii 12)))
   (get contract (map-get? tokens { symbol: symbol }))
+)
+
+;; --- Public Functions ---
+
+;; Change contract administrator (Admin Only)
+(define-public (transfer-ownership (new-admin principal))
+  (begin
+    (asserts! (is-eq tx-sender (var-get contract-admin)) ERR-NOT-AUTHORIZED)
+    (ok (var-set contract-admin new-admin))
+  )
+)
+
+;; Add a new token to the registry (Admin Only)
+(define-public (add-token (symbol (string-ascii 12)) (name (string-ascii 64)) (contract principal) (decimals uint) (logo-uri (string-ascii 256)) (chain (string-ascii 20)))
+  (begin
+    (asserts! (is-eq tx-sender (var-get contract-admin)) ERR-NOT-AUTHORIZED)
+    (asserts! (is-none (get-token-metadata symbol)) ERR-TOKEN-ALREADY-EXISTS)
+    (ok (map-set tokens { symbol: symbol } 
+      { 
+        name: name, 
+        contract: contract, 
+        decimals: decimals, 
+        logo-uri: logo-uri, 
+        chain: chain 
+      }
+    ))
+  )
+)
+
+;; Update existing token metadata (Admin Only)
+(define-public (update-token-metadata (symbol (string-ascii 12)) (name (string-ascii 64)) (contract principal) (decimals uint) (logo-uri (string-ascii 256)) (chain (string-ascii 20)))
+  (begin
+    (asserts! (is-eq tx-sender (var-get contract-admin)) ERR-NOT-AUTHORIZED)
+    (asserts! (is-some (get-token-metadata symbol)) ERR-TOKEN-NOT-FOUND)
+    (ok (map-set tokens { symbol: symbol } 
+      { 
+        name: name, 
+        contract: contract, 
+        decimals: decimals, 
+        logo-uri: logo-uri, 
+        chain: chain 
+      }
+    ))
+  )
+)
+
+;; Remove a token from the registry (Admin Only)
+(define-public (remove-token (symbol (string-ascii 12)))
+  (begin
+    (asserts! (is-eq tx-sender (var-get contract-admin)) ERR-NOT-AUTHORIZED)
+    (asserts! (is-some (get-token-metadata symbol)) ERR-TOKEN-NOT-FOUND)
+    (ok (map-delete tokens { symbol: symbol }))
+  )
 )

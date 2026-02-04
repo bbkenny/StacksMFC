@@ -13,13 +13,13 @@ This document tracks the engineering tasks for the Clarity smart contracts, focu
   - [x] Implement `is-token-verified` check.
 
 ### Issue #2: Administrative Access Control
-**Priority:** High | **Status:** 📅 Pending  
+**Priority:** High | **Status:** ✅ Completed  
 **Description:** Ensure only authorized maintainers can update the registry.
 - **Tasks:**
-  - [ ] Implement `contract-owner` constant.
-  - [ ] Add `add-token` function with `asserts! (is-eq tx-sender contract-owner)`.
-  - [ ] Add `update-token-metadata` function.
-  - [ ] Add `transfer-ownership` function for governance.
+  - [x] Implement `contract-admin` variable for governance.
+  - [x] Add `add-token` function with authorization check.
+  - [x] Add `update-token-metadata` function.
+  - [x] Add `transfer-ownership` function.
 
 ### Issue #3: Registry Validation Logic
 **Priority:** Medium | **Status:** 📅 Pending  
