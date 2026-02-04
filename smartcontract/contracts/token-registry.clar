@@ -43,6 +43,11 @@
   (get contract (map-get? tokens { symbol: symbol }))
 )
 
+;; Get metadata for multiple tokens (Batch Fetcher)
+(define-read-only (get-multiple-tokens (symbols (list 20 (string-ascii 12))))
+  (map get-token-metadata symbols)
+)
+
 ;; --- Public Functions ---
 
 ;; Change contract administrator (Admin Only)

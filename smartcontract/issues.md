@@ -34,11 +34,11 @@ This document tracks the engineering tasks for the Clarity smart contracts, focu
 ## 📊 Module 2: Utility & Aggregation (Read-Only)
 
 ### Issue #4: Portfolio Batch Fetcher
-**Priority:** Medium | **Status:** 📅 Pending  
-**Description:** Create a helper function to fetch multiple token balances in a single call for the frontend.
+**Priority:** Medium | **Status:** ✅ Completed  
+**Description:** Create a helper function to fetch multiple token records in a single call.
 - **Tasks:**
-  - [ ] Implement `get-balances` function taking a list of token principals.
-  - [ ] Return a response with `{ token: principal, balance: uint }` list.
+  - [x] Implement `get-multiple-tokens` function taking a list of symbols.
+  - [x] Return a list of metadata records for efficient frontend loading.
 
 ---
 
