@@ -3,193 +3,183 @@
 import { WalletPanel } from "./components/wallet-panel";
 import { useStacks } from "@/lib/hooks/use-stacks";
 import Link from "next/link";
-import { ShieldCheck, Search, FileCheck, ArrowRight, Sparkles } from "lucide-react";
+import { 
+  BarChart3, 
+  Calculator, 
+  Radar, 
+  ArrowRight, 
+  Sparkles,
+  ChevronRight,
+  Zap,
+  Shield
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Home() {
-  const { isConnected } = useStacks();
+  const { isConnected, isReady } = useStacks();
 
   const features = [
     {
       title: "Balance Viewer",
-      desc: "View real-time BTC, STX, and sBTC balances with live USD valuation.",
+      desc: "Real-time BTC, STX, and sBTC tracking with live USD valuations and metadata.",
       href: "/balances",
-      icon: ShieldCheck,
-      action: "Check Portfolio",
+      icon: BarChart3,
+      color: "text-orange-500",
+      bg: "bg-orange-500/10",
       id: "balance-card"
     },
     {
       title: "DeFi Radar",
-      desc: "Monitor lending APYs, swap rates, and sBTC bridge status in real-time.",
+      desc: "Live monitoring of lending APYs, swap rates, and sBTC bridge status on Stacks.",
       href: "/radar",
-      icon: Search,
-      action: "Track Yields",
+      icon: Radar,
+      color: "text-blue-500",
+      bg: "bg-blue-500/10",
       id: "radar-card"
     },
     {
       title: "Asset Converter",
-      desc: "Instant conversion calculator for BTC, STX, USD, and stablecoins.",
+      desc: "Precise financial calculator for instant conversions across the ecosystem.",
       href: "/convert",
-      icon: FileCheck,
-      action: "Start Calculator",
+      icon: Calculator,
+      color: "text-green-500",
+      bg: "bg-green-500/10",
       id: "convert-card"
     }
   ];
 
+  if (!isReady) return null;
+
   return (
-    <main className="min-h-[calc(100vh-4rem)] bg-[#0B0E14] text-foreground relative overflow-hidden flex flex-col justify-center">
-      {/* Background Gradients - Shape Morphing feel */}
-      <motion.div 
-        animate={{ 
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[150px] -mr-96 -mt-96 pointer-events-none z-0" 
-      />
-      <motion.div 
-        animate={{ 
-          scale: [1, 1.1, 1],
-          x: [0, 50, 0],
-        }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] -ml-48 -mb-48 pointer-events-none z-0" 
-      />
+    <main className="min-h-[calc(100vh-4rem)] bg-[#0B0B0C] text-[#EDEDED] relative overflow-hidden flex flex-col">
+      {/* Terminal Grid Effect */}
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] pointer-events-none opacity-20" />
       
-      <div className="mx-auto flex max-w-7xl flex-col gap-16 px-6 py-12 md:py-20 relative z-10 w-full">
-        <header className="flex flex-col gap-8 text-left items-start">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            className="flex items-center gap-2 px-5 py-2 rounded-full border border-primary/30 w-fit bg-primary/10 backdrop-blur-xl shadow-[0_0_30px_rgba(249,115,22,0.2)]"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-primary animate-pulse" />
-            <span className="text-[11px] font-black uppercase tracking-[0.3em] text-primary">
-              Bitcoin-Anchored Trust
-            </span>
-          </motion.div>
-          
-          <div className="space-y-6">
-            <motion.h1 
-              initial={{ opacity: 0, y: 50, rotateX: 45 }}
-              animate={{ opacity: 1, y: 0, rotateX: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-7xl md:text-[120px] font-black tracking-tighter text-white leading-[0.85] max-w-4xl"
+      <div className="mx-auto flex max-w-7xl flex-col gap-16 px-6 py-16 md:py-24 relative z-10 w-full">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <header className="flex flex-col gap-8 text-left">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 w-fit bg-primary/5 backdrop-blur-xl"
             >
-              {isConnected ? (
-                <>Welcome to your <br /><span className="text-primary italic">Finance Console</span></>
-              ) : (
-                <>Bitcoin <br /><span className="text-primary italic">Finance Radar</span></>
-              )}
-            </motion.h1>
+              <Sparkles className="w-3 h-3 text-primary" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">
+                Bitcoin Finance Radar
+              </span>
+            </motion.div>
             
-            <motion.p 
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="text-xl md:text-3xl text-slate-400 max-w-3xl leading-relaxed font-medium"
-            >
-              {isConnected 
-                ? "Your wallet is connected. Track your assets and explore DeFi opportunities on Stacks."
-                : "A lightweight dashboard for Bitcoin & Stacks users. View balances, convert values, and monitor yields."}
-            </motion.p>
-          </div>
-        </header>
+            <div className="space-y-6">
+              <motion.h1 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-6xl md:text-8xl font-black tracking-tighter text-white leading-[0.9]"
+              >
+                Simple. Fast. <br />
+                <span className="text-primary italic">Hackable.</span>
+              </motion.h1>
+              
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="text-lg md:text-xl text-slate-400 max-w-xl leading-relaxed font-medium"
+              >
+                The minimal finance console for the Bitcoin ecosystem. Monitor your Stacks portfolio and DeFi yields with zero complexity.
+              </motion.p>
 
-        <AnimatePresence mode="wait">
-          {isConnected ? (
-            <motion.div 
-              key="features"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full"
-            >
-              {features.map((feat, i) => (
-                <motion.div
-                  key={feat.href}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5 + i * 0.1, duration: 0.5, ease: "easeOut" }}
-                  whileHover={{ y: -10 }}
-                  layoutId={feat.id}
-                >
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="flex flex-wrap gap-4 pt-4"
+              >
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                  <Zap className="w-3 h-3" /> Built on Stacks
+                </div>
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                  <Shield className="w-3 h-3" /> Non-Custodial
+                </div>
+              </motion.div>
+            </div>
+          </header>
+
+          <AnimatePresence mode="wait">
+            {!isConnected ? (
+              <motion.div 
+                key="login"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-[#121212] border border-white/5 p-10 rounded-[40px] shadow-2xl backdrop-blur-3xl relative overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none" />
+                <WalletPanel />
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="status"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="grid gap-4"
+              >
+                <div className="bg-primary/10 border border-primary/20 p-8 rounded-[32px] backdrop-blur-xl">
+                  <h2 className="text-2xl font-black italic uppercase tracking-tighter text-white mb-2">
+                    Terminal Active
+                  </h2>
+                  <p className="text-sm text-slate-400 font-medium mb-6">
+                    Console synchronized with Stacks network. Ready to monitor your assets.
+                  </p>
                   <Link 
-                    href={feat.href}
-                    className="group relative flex flex-col gap-10 p-12 rounded-[56px] border border-white/5 bg-[#0F172A]/40 hover:bg-[#0F172A]/80 hover:border-primary/50 transition-all duration-500 shadow-2xl overflow-hidden backdrop-blur-2xl h-full border-b-8 border-b-white/5 hover:border-b-primary shadow-black/50"
+                    href="/balances"
+                    className="inline-flex items-center gap-2 bg-primary text-black px-6 py-3 rounded-full font-black uppercase text-[10px] tracking-widest hover:gap-4 transition-all"
                   >
-                    {/* Zoom Match Cut Overlay */}
-                    <motion.div 
-                      className="absolute inset-0 bg-primary opacity-0 group-active:opacity-10 transition-opacity"
-                      layoutId={`zoom-${feat.id}`}
-                    />
-                    
-                    <div className="relative z-10">
-                      <motion.div 
-                        layoutId={`icon-box-${feat.id}`}
-                        className="p-6 bg-primary/10 rounded-[32px] text-primary w-fit border border-primary/20 shadow-[inset_0_0_30px_rgba(249,115,22,0.1)] group-hover:rounded-full group-hover:bg-primary group-hover:text-white transition-all duration-500"
-                      >
-                        <feat.icon className="w-10 h-10" />
-                      </motion.div>
-                    </div>
-
-                    <div className="space-y-4 relative z-10 flex-grow">
-                      <motion.h3 
-                        layoutId={`title-${feat.id}`}
-                        className="text-4xl font-black text-white italic tracking-tighter uppercase leading-[0.9] group-hover:text-primary transition-colors"
-                      >
-                        {feat.title.split(' ').map((word, idx) => (
-                          <span key={idx} className="block">{word}</span>
-                        ))}
-                      </motion.h3>
-                      <p className="text-lg text-slate-400 leading-relaxed font-medium opacity-80 group-hover:opacity-100 transition-opacity">
-                        {feat.desc}
-                      </p>
-                    </div>
-                    
-                    <div className="relative z-10 mt-auto">
-                      <motion.div 
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 0.3, x: 0 }}
-                        whileHover={{ opacity: 1, x: 5 }}
-                        className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.5em] text-primary"
-                      >
-                        {feat.action} <ArrowRight className="w-4 h-4" />
-                      </motion.div>
-                    </div>
-
-                    {/* Shape Morphing Decorative Background */}
-                    <motion.div 
-                      animate={{ 
-                        borderRadius: ["30% 70% 70% 30% / 30% 30% 70% 70%", "50% 50% 20% 80% / 25% 80% 20% 75%", "30% 70% 70% 30% / 30% 30% 70% 70%"],
-                        rotate: [0, 90, 0]
-                      }}
-                      transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                      className="absolute -bottom-24 -right-24 w-80 h-80 bg-primary/5 blur-[60px] group-hover:bg-primary/20 transition-all duration-1000 pointer-events-none" 
-                    />
+                    Enter Console <ArrowRight className="w-4 h-4" />
                   </Link>
-                </motion.div>
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div 
-              key="login"
-              initial={{ opacity: 0, scale: 0.9, y: 100 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.8, type: "spring" }}
-              className="col-span-full max-w-2xl mx-auto md:mx-0 w-full"
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8">
+          {features.map((feat, i) => (
+            <motion.div
+              key={feat.href}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 + i * 0.1 }}
             >
-              <div className="p-12 md:p-20 rounded-[80px] border border-white/10 bg-[#0F172A]/40 shadow-[0_0_120px_rgba(0,0,0,0.8)] relative overflow-hidden backdrop-blur-3xl shadow-black">
-                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[150px] -mr-64 -mt-64 pointer-events-none" />
-                 <div className="relative z-10 scale-110 md:scale-125 origin-top-left py-8">
-                    <WalletPanel />
-                 </div>
-              </div>
+              <Link 
+                href={feat.href}
+                className="group p-8 rounded-[32px] bg-[#121212] border border-white/5 hover:border-primary/50 transition-all block relative overflow-hidden"
+              >
+                <div className={`${feat.bg} ${feat.color} w-12 h-12 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                  <feat.icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors flex items-center gap-2">
+                  {feat.title} <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
+                </h3>
+                <p className="text-sm text-slate-400 leading-relaxed font-medium">
+                  {feat.desc}
+                </p>
+                
+                {/* Subtle terminal lines */}
+                <div className="absolute top-0 right-0 h-full w-[1px] bg-white/5 group-hover:bg-primary/20 transition-colors" />
+              </Link>
             </motion.div>
-          )}
-        </AnimatePresence>
+          ))}
+        </div>
       </div>
+      
+      {/* Footer */}
+      <footer className="mt-auto border-t border-white/5 py-8 px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-600">
+        <div>&copy; 2026 STACKS MINI FINANCE CONSOLE</div>
+        <div className="flex gap-8">
+          <Link href="https://github.com/bbkenny/StacksMFC" className="hover:text-primary transition-colors">GITHUB</Link>
+          <Link href="#" className="hover:text-primary transition-colors">DOCUMENTATION</Link>
+        </div>
+      </footer>
     </main>
   );
 }
