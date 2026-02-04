@@ -1,0 +1,20 @@
+[project]
+name = 'stacks-mfc'
+description = 'Stacks Mini Finance Console - A lightweight Bitcoin & Stacks financial dashboard'
+authors = []
+telemetry = true
+cache_dir = './.cache'
+requirements = []
+
+[repl.analysis]
+passes = ['check_checker']
+
+[repl.analysis.check_checker]
+strict = false
+trusted_sender = false
+trusted_caller = false
+callee_filter = false
+
+[repl.remote_data]
+enabled = false
+api_url = 'https://api.hiro.so'
