@@ -51,7 +51,7 @@ This document tracks the engineering tasks for the Clarity smart contracts, focu
 - [x] **Integration**: Test fetching registry data via `vitest` and `clarinet-sdk`.
 
 ### Issue #6: Security Review
-**Priority:** Critical | **Status:** 📅 Pending  
-- [ ] Check for post-condition vulnerabilities.
-- [ ] Ensure all administrative functions are properly gated.
-- [ ] Optimize data maps for gas efficiency.
+**Priority:** Critical | **Status:** ✅ Completed  
+- [x] Check for post-condition vulnerabilities.
+- [x] Ensure all administrative functions are properly gated.
+- [x] Optimize data maps for gas efficiency.
