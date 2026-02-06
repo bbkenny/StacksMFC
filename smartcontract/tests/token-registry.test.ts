@@ -231,4 +231,31 @@ describe("token-registry", () => {
     expect(resArray[1]).not.toBeNull();
     expect(resArray[2].value).toBeNull();
   });
+
+  it("should respect the pause mechanism", () => {
+    // Pause contract
+    simnet.callPublicFn("token-registry", "set-paused", [Cl.bool(true)], DEPLOYER);
+    
+    // Attempt to add token
+    const { result } = simnet.callPublicFn(
+      "token-registry",
+      "add-token",
+      [Cl.stringAscii("PAU"), Cl.stringAscii("Paused"), Cl.principal(DEPLOYER), Cl.uint(6), Cl.stringAscii(""), Cl.stringAscii("S")],
+      DEPLOYER
+    );
+    
+    expect(result).toBeErr(Cl.uint(105)); // ERR-CONTRACT-PAUSED
+
+    // Unpause
+    simnet.callPublicFn("token-registry", "set-paused", [Cl.bool(false)], DEPLOYER);
+
+    // Attempt again
+    const { result: result2 } = simnet.callPublicFn(
+        "token-registry",
+        "add-token",
+        [Cl.stringAscii("PAU"), Cl.stringAscii("Paused"), Cl.principal(DEPLOYER), Cl.uint(6), Cl.stringAscii(""), Cl.stringAscii("S")],
+        DEPLOYER
+      );
+    expect(result2).toBeOk(Cl.bool(true));
+  });
 });
