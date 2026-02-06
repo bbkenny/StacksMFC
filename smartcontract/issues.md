@@ -45,10 +45,10 @@ This document tracks the engineering tasks for the Clarity smart contracts, focu
 ## 🧪 Testing & Quality Assurance
 
 ### Issue #5: Comprehensive Test Suite
-**Priority:** High | **Status:** 🚧 In Progress  
-- [ ] **Unit Tests**: Test successful token addition and unauthorized rejection.
-- [ ] **Edge Cases**: Test updating non-existent tokens and removing tokens.
-- [ ] **Integration**: Test fetching registry data via `vitest` and `clarinet-sdk`.
+**Priority:** High | **Status:** ✅ Completed  
+- [x] **Unit Tests**: Test successful token addition and unauthorized rejection.
+- [x] **Edge Cases**: Test updating non-existent tokens and removing tokens.
+- [x] **Integration**: Test fetching registry data via `vitest` and `clarinet-sdk`.
 
 ### Issue #6: Security Review
 **Priority:** Critical | **Status:** 📅 Pending  
