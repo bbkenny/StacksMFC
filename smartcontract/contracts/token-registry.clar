@@ -4,6 +4,7 @@
 ;; --- Data Maps and Vars ---
 
 (define-data-var contract-admin principal tx-sender)
+(define-data-var contract-paused bool false)
 
 (define-map tokens 
   { symbol: (string-ascii 12) }
@@ -25,6 +26,7 @@
 (define-constant ERR-TOKEN-NOT-FOUND (err u102))
 (define-constant ERR-INVALID-SYMBOL (err u103))
 (define-constant ERR-INVALID-DECIMALS (err u104))
+(define-constant ERR-CONTRACT-PAUSED (err u105))
 
 ;; --- Read-Only Functions ---
 
@@ -48,6 +50,11 @@
   (map get-token-metadata symbols)
 )
 
+;; Check if contract is paused
+(define-read-only (is-paused)
+  (var-get contract-paused)
+)
+
 ;; --- Public Functions ---
 
 ;; Change contract administrator (Admin Only)
@@ -58,10 +65,19 @@
   )
 )
 
+;; Set pause state (Admin Only)
+(define-public (set-paused (paused bool))
+  (begin
+    (asserts! (is-eq tx-sender (var-get contract-admin)) ERR-NOT-AUTHORIZED)
+    (ok (var-set contract-paused paused))
+  )
+)
+
 ;; Add a new token to the registry (Admin Only)
 (define-public (add-token (symbol (string-ascii 12)) (name (string-ascii 64)) (contract principal) (decimals uint) (logo-uri (string-ascii 256)) (chain (string-ascii 20)))
   (begin
     (asserts! (is-eq tx-sender (var-get contract-admin)) ERR-NOT-AUTHORIZED)
+    (asserts! (not (var-get contract-paused)) ERR-CONTRACT-PAUSED)
     (asserts! (> (len symbol) u0) ERR-INVALID-SYMBOL)
     (asserts! (<= decimals u18) ERR-INVALID-DECIMALS)
     (asserts! (is-none (get-token-metadata symbol)) ERR-TOKEN-ALREADY-EXISTS)
@@ -81,6 +97,7 @@
 (define-public (update-token-metadata (symbol (string-ascii 12)) (name (string-ascii 64)) (contract principal) (decimals uint) (logo-uri (string-ascii 256)) (chain (string-ascii 20)))
   (begin
     (asserts! (is-eq tx-sender (var-get contract-admin)) ERR-NOT-AUTHORIZED)
+    (asserts! (not (var-get contract-paused)) ERR-CONTRACT-PAUSED)
     (asserts! (> (len symbol) u0) ERR-INVALID-SYMBOL)
     (asserts! (<= decimals u18) ERR-INVALID-DECIMALS)
     (asserts! (is-some (get-token-metadata symbol)) ERR-TOKEN-NOT-FOUND)
@@ -100,6 +117,7 @@
 (define-public (remove-token (symbol (string-ascii 12)))
   (begin
     (asserts! (is-eq tx-sender (var-get contract-admin)) ERR-NOT-AUTHORIZED)
+    (asserts! (not (var-get contract-paused)) ERR-CONTRACT-PAUSED)
     (asserts! (is-some (get-token-metadata symbol)) ERR-TOKEN-NOT-FOUND)
     (ok (map-delete tokens { symbol: symbol }))
   )
