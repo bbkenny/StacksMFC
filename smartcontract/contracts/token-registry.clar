@@ -17,7 +17,24 @@
   }
 )
 
+(define-map token-status 
+  { symbol: (string-ascii 12) }
+  {
+    verified: bool,
+    verified-by: (optional principal),
+    verified-at: (optional uint),
+    last-updated: uint
+  }
+)
+
+
+
 ;; --- Constants ---
+
+(define-constant STATUS-UNVERIFIED (ok u0))
+(define-constant STATUS-VERIFIED (ok u1))
+(define-constant STATUS-FLAGGED (ok u2))
+(define-constant STATUS-BLACKLISTED (ok u3))
 
 ;; Error Codes ---
 
