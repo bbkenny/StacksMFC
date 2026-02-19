@@ -20,6 +20,19 @@ export function Navbar() {
           Stacks<span className="text-primary italic">MFC</span>
         </span>
       </Link>
+
+        <div className="hidden md:flex items-center gap-8">
+      <Link href="/marketplace" className="text-sm text-slate-300 hover:text-primary transition-colors">
+        Marketplace
+      </Link>
+      <Link href="/create" className="text-sm text-slate-300 hover:text-primary transition-colors">
+        Create
+      </Link>
+      <Link href="/profile" className="text-sm text-slate-300 hover:text-primary transition-colors">
+        Profile
+      </Link>
+    </div>
+  </div>
       
       <div className="flex items-center gap-6">
         {isConnected && (
