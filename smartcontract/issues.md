@@ -6,5 +6,5 @@
 - ✅ Added `set-paused` and checked state in modifying functions.
 
 ### Issue #8: Metadata Pagination (Read-Only)
-**Priority:** Low | **Status:** 🚧 In Progress  
-- [ ] Implement `get-token-list-paged` using a sequence-based approach.
+**Priority:** Low | **Status:** ✅ Completed  
+- ✅ Implement `get-token-list-paged` using a sequence-based approach.

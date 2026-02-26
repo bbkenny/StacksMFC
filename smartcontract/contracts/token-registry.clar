@@ -17,6 +17,10 @@
   }
 )
 
+;; To support pagination
+(define-data-var token-count uint u0)
+(define-map token-index { id: uint } { symbol: (string-ascii 12) })
+
 ;; --- Constants ---
 
 ;; Error Codes ---
@@ -55,6 +59,24 @@
   (var-get contract-paused)
 )
 
+;; Get the total token count
+(define-read-only (get-token-count)
+  (var-get token-count)
+)
+
+;; Get a token symbol by index
+(define-read-only (get-token-by-index (id uint))
+  (map-get? token-index { id: id })
+)
+
+;; Get paginated token symbols (e.g. up to 50 at a time)
+(define-read-only (get-token-list-paged (start-id uint))
+  (map get-token-by-index 
+    (list start-id (+ start-id u1) (+ start-id u2) (+ start-id u3) (+ start-id u4)
+          (+ start-id u5) (+ start-id u6) (+ start-id u7) (+ start-id u8) (+ start-id u9))
+  )
+)
+
 ;; --- Public Functions ---
 
 ;; Change contract administrator (Admin Only)
@@ -75,21 +97,33 @@
 
 ;; Add a new token to the registry (Admin Only)
 (define-public (add-token (symbol (string-ascii 12)) (name (string-ascii 64)) (contract principal) (decimals uint) (logo-uri (string-ascii 256)) (chain (string-ascii 20)))
-  (begin
-    (asserts! (is-eq tx-sender (var-get contract-admin)) ERR-NOT-AUTHORIZED)
-    (asserts! (not (var-get contract-paused)) ERR-CONTRACT-PAUSED)
-    (asserts! (> (len symbol) u0) ERR-INVALID-SYMBOL)
-    (asserts! (<= decimals u18) ERR-INVALID-DECIMALS)
-    (asserts! (is-none (get-token-metadata symbol)) ERR-TOKEN-ALREADY-EXISTS)
-    (ok (map-set tokens { symbol: symbol } 
-      { 
-        name: name, 
-        contract: contract, 
-        decimals: decimals, 
-        logo-uri: logo-uri, 
-        chain: chain 
-      }
-    ))
+  (let ((current-id (var-get token-count)))
+    (begin
+      (asserts! (is-eq tx-sender (var-get contract-admin)) ERR-NOT-AUTHORIZED)
+      (asserts! (not (var-get contract-paused)) ERR-CONTRACT-PAUSED)
+      (asserts! (> (len symbol) u0) ERR-INVALID-SYMBOL)
+      (asserts! (<= decimals u18) ERR-INVALID-DECIMALS)
+      (asserts! (is-none (get-token-metadata symbol)) ERR-TOKEN-ALREADY-EXISTS)
+      
+      ;; Store the token mapping
+      (map-set tokens { symbol: symbol } 
+        { 
+          name: name, 
+          contract: contract, 
+          decimals: decimals, 
+          logo-uri: logo-uri, 
+          chain: chain 
+        }
+      )
+      
+      ;; Store the token index for pagination
+      (map-set token-index { id: current-id } { symbol: symbol })
+      
+      ;; Increment the global token count
+      (var-set token-count (+ current-id u1))
+      
+      (ok true)
+    )
   )
 )
 
