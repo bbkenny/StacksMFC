@@ -14,8 +14,10 @@ This document outlines the UI/UX development and blockchain integration strategy
   - [ ] Add `Framer Motion` page transitions (slide-up + fade).
 
 ### Issue #2: Real-time "Ticker" Component
-**Priority:** Low | **Status:** 📅 Pending  
+**Priority:** Low | **Status:** ✅ Completed  
 **Description:** A scrolling ticker at the top/bottom showing live BTC/STX prices.
+- ✅ Implemented `Ticker.tsx` component.
+- ✅ Added animated price feed and global layout integration.
 
 ---
 
