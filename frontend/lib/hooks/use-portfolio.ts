@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useStacks } from "./use-stacks";
 import { STACKS_NETWORK_CONFIG, SC_CONTRACTS } from "../constants/contracts";
-import { callReadOnlyFunction, cvToJSON, uintCV } from "@stacks/transactions";
-import { StacksMainnet, StacksTestnet } from "@stacks/network";
+import { fetchCallReadOnlyFunction, cvToJSON, uintCV } from "@stacks/transactions";
+import { STACKS_MAINNET, STACKS_TESTNET } from "@stacks/network";
 
 export type PortfolioAsset = {
   symbol: string;
@@ -36,7 +36,7 @@ export function usePortfolio() {
     try {
       const isTestnet = network === "testnet";
       const apiUrl = isTestnet ? STACKS_NETWORK_CONFIG.testnetApiUrl : STACKS_NETWORK_CONFIG.coreApiUrl;
-      const stacksNodeNetwork = isTestnet ? new StacksTestnet() : new StacksMainnet();
+      const stacksNodeNetwork = isTestnet ? STACKS_TESTNET : STACKS_MAINNET;
 
       // 1. Fetch STX Balance from Hiro API
       const balanceRes = await fetch(`${apiUrl}/extended/v1/address/${address}/balances`);
@@ -73,7 +73,7 @@ export function usePortfolio() {
         
         // Fetch tokens via `get-token-list-paged` mapping 
         // We will make a sample call using start-id 0 (this relies on your backend returning some tokens)
-        const resultCV = await callReadOnlyFunction({
+        const resultCV = await fetchCallReadOnlyFunction({
           contractAddress,
           contractName,
           functionName: "get-token-list-paged",
