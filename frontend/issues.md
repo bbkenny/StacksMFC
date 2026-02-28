@@ -24,12 +24,12 @@ This document outlines the UI/UX development and blockchain integration strategy
 ## ⛓️ Phase 2: Stacks & Wallet Integration
 
 ### Issue #3: Robust Session Management
-**Priority:** High | **Status:** 📅 Pending  
+**Priority:** High | **Status:** ✅ Completed  
 **Description:** Handle wallet state and data persistence using `@stacks/connect`.
 - **Tasks:**
-  - [ ] Implement `StacksProvider` context to wrap the application.
-  - [ ] Store `UserData` and handle `onFinish` callbacks for auth.
-  - [ ] Implement "Address Formatting" utility (e.g., `SP12...ABCD`).
+  - [x] Implement `StacksProvider` context to wrap the application.
+  - [x] Store `UserData` and handle `onFinish` callbacks for auth.
+  - [x] Implement "Address Formatting" utility (e.g., `SP12...ABCD`).
 
 ### Issue #4: Asset Portfolio Engine
 **Priority:** Critical | **Status:** 📅 Pending  

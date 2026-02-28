@@ -2,13 +2,10 @@
 
 import Link from "next/link";
 import { useStacks } from "@/lib/hooks/use-stacks";
+import { abbreviateAddress } from "@/lib/utils/stx";
 
 export function Navbar() {
   const { isConnected, connect, disconnect, address, network } = useStacks();
-
-  const truncateAddress = (addr: string) => {
-    return `${addr.slice(0, 5)}...${addr.slice(-4)}`;
-  };
 
   return (
     <nav className="h-16 border-b border-white/5 bg-[#0B0B0C]/80 flex items-center justify-between px-6 sticky top-0 z-50 backdrop-blur-xl">
@@ -38,7 +35,7 @@ export function Navbar() {
                   {network}
                 </span>
                 <span className="text-[11px] font-medium text-slate-300">
-                  {address ? truncateAddress(address) : ""}
+                  {address ? abbreviateAddress(address) : ""}
                 </span>
               </div>
               <button 

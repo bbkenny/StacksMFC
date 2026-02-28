@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "./components/navbar";
 import { Ticker } from "./components/Ticker";
 import { ThemeProvider } from "./components/providers/theme-provider";
+import { StacksProvider } from "./components/providers/stacks-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,13 +37,15 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex flex-col min-h-screen">
-            <Ticker />
-            <Navbar />
-            <div className="flex-1">
-              {children}
+          <StacksProvider>
+            <div className="flex flex-col min-h-screen">
+              <Ticker />
+              <Navbar />
+              <div className="flex-1">
+                {children}
+              </div>
             </div>
-          </div>
+          </StacksProvider>
         </ThemeProvider>
       </body>
     </html>
