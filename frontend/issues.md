@@ -32,13 +32,13 @@ This document outlines the UI/UX development and blockchain integration strategy
   - [x] Implement "Address Formatting" utility (e.g., `SP12...ABCD`).
 
 ### Issue #4: Asset Portfolio Engine
-**Priority:** Critical | **Status:** 📅 Pending  
+**Priority:** Critical | **Status:** ✅ Completed  
 **Description:** The core logic for fetching balances across multiple assets.
 - **Tasks:**
-  - [ ] Integrate `Hiro API` for STX balance.
-  - [ ] Integrate `CoinGecko API` for real-time USD conversion rates.
-  - [ ] Map through `Token Registry` contract to fetch SIP-010 balances.
-  - [ ] Calculate total portfolio value in USD.
+  - [x] Integrate `Hiro API` for STX balance.
+  - [x] Integrate `CoinGecko API` for real-time USD conversion rates.
+  - [x] Map through `Token Registry` contract to fetch SIP-010 balances.
+  - [x] Calculate total portfolio value in USD.
 
 ---
 
