@@ -259,3 +259,119 @@ describe("token-registry", () => {
     expect(result2).toBeOk(Cl.bool(true));
   });
 });
+
+describe("token status functionality", () => {
+  beforeEach(() => {
+    // Add a test token
+    simnet.callPublicFn(
+      "token-registry",
+      "add-token",
+      [
+        Cl.stringAscii("STX"),
+        Cl.stringAscii("Stacks"),
+        Cl.principal(DEPLOYER),
+        Cl.uint(6),
+        Cl.stringAscii("logo.png"),
+        Cl.stringAscii("Stacks"),
+      ],
+      DEPLOYER
+    );
+  });
+
+  it("should check if token is verified", () => {
+    const result = simnet.callReadOnlyFn(
+      "token-registry",
+      "is-token-verified",
+      [Cl.stringAscii("STX")],
+      DEPLOYER
+    );
+
+    expect(result.result).toBeOk(Cl.bool(true));
+  });
+
+  it("should return false for non-existent token", () => {
+    const result = simnet.callReadOnlyFn(
+      "token-registry",
+      "is-token-verified",
+      [Cl.stringAscii("BTC")],
+      DEPLOYER
+    );
+
+    expect(result.result).toBeOk(Cl.bool(false));
+  });
+
+  it("should get multiple tokens correctly", () => {
+    // Add another token
+    simnet.callPublicFn(
+      "token-registry",
+      "add-token",
+      [
+        Cl.stringAscii("BTC"),
+        Cl.stringAscii("Bitcoin"),
+        Cl.principal(DEPLOYER),
+        Cl.uint(8),
+        Cl.stringAscii("btc.png"),
+        Cl.stringAscii("Bitcoin"),
+      ],
+      DEPLOYER
+    );
+
+    const result = simnet.callReadOnlyFn(
+      "token-registry",
+      "get-multiple-tokens",
+      [
+        Cl.list([
+          Cl.stringAscii("STX"),
+          Cl.stringAscii("BTC"),
+          Cl.stringAscii("ETH") // Doesn't exist
+        ])
+      ],
+      DEPLOYER
+    );
+
+    const values = cvToValue(result.result);
+    expect(values).toHaveLength(3);
+    expect(values[0]).not.toBeNull();
+    expect(values[1]).not.toBeNull();
+    expect(values[2]).toBeNull();
+  });
+
+  it("should check if contract is paused", () => {
+    // Initially not paused
+    const result1 = simnet.callReadOnlyFn(
+      "token-registry",
+      "is-paused",
+      [],
+      DEPLOYER
+    );
+    expect(result1.result).toBeOk(Cl.bool(false));
+
+    // Pause it
+    simnet.callPublicFn(
+      "token-registry",
+      "set-paused",
+      [Cl.bool(true)],
+      DEPLOYER
+    );
+
+    // Now should be paused
+    const result2 = simnet.callReadOnlyFn(
+      "token-registry",
+      "is-paused",
+      [],
+      DEPLOYER
+    );
+    expect(result2.result).toBeOk(Cl.bool(true));
+  });
+
+  it("should get token contract address", () => {
+    const result = simnet.callReadOnlyFn(
+      "token-registry",
+      "get-token-contract",
+      [Cl.stringAscii("STX")],
+      DEPLOYER
+    );
+
+    expect(result.result).toBeSome(Cl.principal(DEPLOYER));
+  });
+});
